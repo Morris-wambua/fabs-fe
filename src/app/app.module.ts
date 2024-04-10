@@ -5,11 +5,11 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserComponent } from './user/user.component';
 import { AppRoutingModule } from './app-rounting.module';
-import { UserService } from './services/user.service';
+import { UserService } from './user/user.service';
 import { LocationComponent } from './location/location.component';
-import { LocationService } from './services/location.service';
+import { LocationService } from './location/location.service';
 import { StoreComponent } from './store/store.component';
-import { StoreService } from './services/store.service';
+import { StoreService } from './store/store.service';
 
 @NgModule({
   declarations: [

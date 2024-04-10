@@ -6,6 +6,7 @@ import { LocationService } from '../location/location.service';
 import { StoreService } from '../store/store.service';
 import { Store } from '../store/store';
 import { AppLocation } from '../location/appLocation';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-user',
@@ -15,6 +16,17 @@ import { AppLocation } from '../location/appLocation';
 export class UserComponent implements OnInit {
   // create a parameter to hold the users
   public users: User[] = [];
+  public editUser: User = {
+    lastName: '',
+    firstName: '',
+    contact: '',
+    email: '',
+    image: '',
+    id: '',
+    userStore: '',
+    userLocation: '',
+    rating: 0,
+  };
 
   // create a constructor to call the userService
   constructor(
@@ -77,8 +89,35 @@ export class UserComponent implements OnInit {
     });
   }
 
+  // This will listen to addUser form submission and call the BE
+  public onAddUser(addForm: NgForm): void {
+    document.getElementById('add-user-form')?.click(); // This will click the close btn automatically
+    this.userService.addUser(addForm.value).subscribe(
+      (response: string) => {
+        this.getUsers(); // Reload the users on the page
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+        alert(error.message);
+      }
+    );
+  }
+
+  // This will listen to updateUser form submission and call the BE
+  public onUpdateUser(user: User): void {
+    this.userService.updateUser(user, this.editUser?.id).subscribe(
+      (response: string) => {
+        this.getUsers(); // Reload the users on the page
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+        alert(error.message);
+      }
+    );
+  }
+
   // This will trigger the either the addUser, delete, or update modal
-  public onOpenModal(user: User | undefined, mode: string): void {
+  public onOpenModal(user: User | any, mode: string): void {
     // first create button to trigger modal
     const container = document.getElementById('main-container');
 
@@ -89,13 +128,14 @@ export class UserComponent implements OnInit {
 
     // Added data-toggle attribute based on the mode
     if (mode === 'add') {
-      button.setAttribute('data-target', '#addEmployeeModal');
+      button.setAttribute('data-target', '#addUserModal');
     }
     if (mode === 'edit') {
-      button.setAttribute('data-target', '#updateEmployeeModal');
+      this.editUser = user;
+      button.setAttribute('data-target', '#updateUserModal');
     }
     if (mode === 'delete') {
-      button.setAttribute('data-target', '#deleteEmployeeModal');
+      button.setAttribute('data-target', '#deleteUserModal');
     }
 
     // add the button to the main component

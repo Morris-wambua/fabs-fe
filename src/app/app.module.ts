@@ -11,6 +11,7 @@ import { StoreComponent } from './store/store.component';
 import { StoreService } from './store/store.service';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { AppRoutingModule } from './app-routing.module';
     StoreComponent,
     HomeComponent,
   ],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule],
+  imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule],
   providers: [UserService, LocationService, StoreService],
   bootstrap: [AppComponent],
 })

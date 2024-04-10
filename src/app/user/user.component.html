@@ -45,41 +45,52 @@
       </div>
     </div>
 
-    <!-- Add Employee Modal -->
-  <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+    <!-- Add User Modal -->
+  <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="addEmployeeModalLabel">Add Employee</h5>
+            <h5 class="modal-title" id="addEmployeeModalLabel">Add User</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
          </div>
          <div class="modal-body">
-            <form>
+            <!-- name the form addForm and make it an ngForm, have a submit listner which take the name of the form? -->
+            <form #addForm = "ngForm" (ngSubmit)="onAddUser(addForm)">
             <div class="form-group">
-               <label for="name">Name</label>
-               <input type="text" class="form-control" id="name" placeholder="Name" required>
+               <label for="name">First Name</label>
+               <!-- for every Input, it must have the "name" attribute since it's used to map it, and ngModel to make it ng -->
+               <input type="text" class="form-control" ngModel name="firstName" id="firstName" placeholder="First Name" required>
+            </div>
+            <div class="form-group">
+               <label for="name">Last Name</label>
+               <!-- for every Input, it must have the "name" attribute since it's used to map it, and ngModel to make it ng -->
+               <input type="text" class="form-control" ngModel name="lastName" id="lastName" placeholder="Last Name" required>
             </div>
             <div class="form-group">
                <label for="email">Email Address</label>
-               <input type="email" class="form-control" id="email" placeholder="Email" required>
+               <input type="email" class="form-control" ngModel name="email" id="email" placeholder="Email" required>
             </div>
             <div class="form-group">
-               <label for="phone">Job title</label>
-               <input type="text" class="form-control" id="jobTile" placeholder="Job title" required>
+               <label for="phone">Location</label>
+               <input type="text" class="form-control" ngModel name="userLocation" id="userLocation" placeholder="Location" required>
             </div>
             <div class="form-group">
                <label for="phone">Phone</label>
-               <input type="text" class="form-control" id="phone" placeholder="Phone" required>
+               <input type="text" class="form-control" ngModel name="contact" id="contact" placeholder="Contact" required>
             </div>
             <div class="form-group">
                <label for="phone">Image URL</label>
-               <input type="text" class="form-control" id="imageUrl" placeholder="Image URL" required>
+               <input type="text" class="form-control" ngModel name="image" id="image" placeholder="Image URL" required>
+            </div>
+            <div class="form-group">
+               <label for="phone">Store</label>
+               <input type="text" class="form-control" ngModel name="userStore" id="userStore" placeholder="Store" required>
             </div>
             <div class="modal-footer">
-               <button type="button" id="add-employee-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
-               <button type="submit" class="btn btn-primary" >Save changes</button>
+               <button type="button" id="add-user-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
             </div>
             </form>
          </div>
@@ -89,7 +100,7 @@
 
     
 <!-- Edit Modal -->
-<div class="modal fade" id="updateEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="employeeEditModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateUserModal" tabindex="-1" role="dialog" aria-labelledby="employeeEditModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
        <div class="modal-content">
           <div class="modal-header">
@@ -99,32 +110,43 @@
              </button>
           </div>
           <div class="modal-body">
-             <form>
+             <form #editForm="ngForm">
                 <div class="form-group">
-                   <label for="name">Name</label>
-                   <input type="text" name="name" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Name">
+                   <label for="name">firstName</label>
+                   <input ngModel="{{editUser.firstName}}" type="text" name="firstName" class="form-control" id="firstName" aria-describedby="emailHelp" placeholder="First Name">
                 </div>
-                <input type="hidden" name="id" class="form-control" id="id" placeholder="Email">
-                <input type="hidden" name="userCode" class="form-control" id="userCode" placeholder="Email">
+                <div class="form-group">
+                  <label for="name">lastName</label>
+                  <input ngModel="{{editUser.lastName}}" type="text" name="lastName" class="form-control" id="lastName" aria-describedby="emailHelp" placeholder="lastNameName">
+                </div>
+                <input ngModel="{{editUser.id}}" type="hidden" name="id" class="form-control" id="id" placeholder="Id">
                 <div class="form-group">
                    <label for="email">Email Address</label>
-                   <input type="email" name="email" class="form-control" id="email" placeholder="Email">
+                <input type="hidden" name="userCode" class="form-control" id="userCode" placeholder="Email">
+                   <input ngModel="{{editUser.email}}" type="email" name="email" class="form-control" id="email" placeholder="Email">
                 </div>
                 <div class="form-group">
-                   <label for="phone">Job title</label>
-                   <input type="text" name="jobTitle" class="form-control" id="jobTitle" placeholder="Job title">
+                   <label for="phone">Location</label>
+                   <input ngModel="{{editUser.userLocation}}" type="text" name="userLocation" class="form-control" id="userLocation" placeholder="Location">
                 </div>
                 <div class="form-group">
                    <label for="phone">Phone</label>
-                   <input type="text" name="phone" class="form-control" id="phone" name="phone" placeholder="Phone">
+                   <input ngModel="{{editUser.contact}}" type="text" name="contact" class="form-control" id="contact" name="contact" placeholder="Phone">
                 </div>
                 <div class="form-group">
                    <label for="phone">Image URL</label>
-                   <input type="text" name="imageUrl" class="form-control" id="imageUrl" placeholder="Image URL">
+                   <input ngModel="{{editUser.image}}" type="text" name="image" class="form-control" id="image" placeholder="Image URL">
                 </div>
+                <div class="form-group">
+                  <input ngModel="{{editUser.rating}}" type="hidden" name="rating" class="form-control" id="rating" placeholder="Rating">
+               </div>
+               <div class="form-group">
+                  <label for="rating">Store</label>
+                  <input ngModel="{{editUser.userStore}}" type="text" name="userStore" class="form-control" id="userStore" placeholder="Store">
+               </div>
                 <div class="modal-footer">
                    <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
-                   <button data-dismiss="modal" class="btn btn-primary" >Save changes</button>
+                   <button (click)="onUpdateUser(editForm.value)" data-dismiss="modal" class="btn btn-primary" >Save changes</button>
                 </div>
              </form>
           </div>
@@ -133,7 +155,7 @@
   </div>
 
   <!-- Delete Modal -->
-<div class="modal fade" id="deleteEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
        <div class="modal-content">
           <div class="modal-header">

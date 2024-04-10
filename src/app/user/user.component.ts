@@ -27,6 +27,17 @@ export class UserComponent implements OnInit {
     userLocation: '',
     rating: 0,
   };
+  public deleteUser: User = {
+    lastName: '',
+    firstName: '',
+    contact: '',
+    email: '',
+    image: '',
+    id: '',
+    userStore: '',
+    userLocation: '',
+    rating: 0,
+  };
 
   // create a constructor to call the userService
   constructor(
@@ -95,6 +106,21 @@ export class UserComponent implements OnInit {
     this.userService.addUser(addForm.value).subscribe(
       (response: string) => {
         this.getUsers(); // Reload the users on the page
+        addForm.reset(); // Flush the form for the next input
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+        alert(error.message);
+        addForm.reset();
+      }
+    );
+  }
+
+  // This will listen to updateUser form submission and call the BE
+  public onUpdateUser(user: User): void {
+    this.userService.updateUser(user, this.editUser?.id).subscribe(
+      (response: string) => {
+        this.getUsers(); // Reload the users on the page
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -104,9 +130,9 @@ export class UserComponent implements OnInit {
   }
 
   // This will listen to updateUser form submission and call the BE
-  public onUpdateUser(user: User): void {
-    this.userService.updateUser(user, this.editUser?.id).subscribe(
-      (response: string) => {
+  public onDeleteUser(id: string): void {
+    this.userService.deleteUser(id).subscribe(
+      (response: void) => {
         this.getUsers(); // Reload the users on the page
       },
       (error: HttpErrorResponse) => {
@@ -135,6 +161,7 @@ export class UserComponent implements OnInit {
       button.setAttribute('data-target', '#updateUserModal');
     }
     if (mode === 'delete') {
+      this.deleteUser = user;
       button.setAttribute('data-target', '#deleteUserModal');
     }
 

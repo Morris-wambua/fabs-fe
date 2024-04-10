@@ -4,6 +4,8 @@ export interface User {
   lastName: string;
   contact: string;
   rating: number;
+  email: string;
+  image: string;
   userStore: string;
   userLocation: string;
 }

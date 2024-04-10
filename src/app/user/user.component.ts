@@ -76,4 +76,32 @@ export class UserComponent implements OnInit {
       );
     });
   }
+
+  // This will trigger the either the addUser, delete, or update modal
+  public onOpenModal(user: User | undefined, mode: string): void {
+    // first create button to trigger modal
+    const container = document.getElementById('main-container');
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.style.display = 'none';
+    button.setAttribute('data-toggle', 'modal');
+
+    // Added data-toggle attribute based on the mode
+    if (mode === 'add') {
+      button.setAttribute('data-target', '#addEmployeeModal');
+    }
+    if (mode === 'edit') {
+      button.setAttribute('data-target', '#updateEmployeeModal');
+    }
+    if (mode === 'delete') {
+      button.setAttribute('data-target', '#deleteEmployeeModal');
+    }
+
+    // add the button to the main component
+    container?.appendChild(button);
+
+    // click the button
+    button.click();
+  }
 }

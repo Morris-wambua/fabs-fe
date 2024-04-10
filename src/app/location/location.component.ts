@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { LocationService } from '../services/location.service';
+import { LocationService } from './location.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AppLocation } from '../models/appLocation';
+import { AppLocation } from './appLocation';
 
 @Component({
   selector: 'app-location',

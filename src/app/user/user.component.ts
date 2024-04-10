@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
-import { User } from '../models/user';
+import { UserService } from './user.service';
+import { User } from './user';
 import { HttpErrorResponse } from '@angular/common/http';
-import { LocationService } from '../services/location.service';
-import { StoreService } from '../services/store.service';
-import { Store } from '../models/store';
-import { AppLocation } from '../models/appLocation';
+import { LocationService } from '../location/location.service';
+import { StoreService } from '../store/store.service';
+import { Store } from '../store/store';
+import { AppLocation } from '../location/appLocation';
 
 @Component({
   selector: 'app-user',

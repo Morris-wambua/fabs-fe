@@ -100,6 +100,70 @@ export class UserComponent implements OnInit {
     });
   }
 
+  // Add the search functionality
+  public searchUsers(key: string): void {
+    const results: User[] = [];
+
+    // console.log(key);
+
+    for (const user of this.users) {
+      if (
+        user.firstName.toLocaleLowerCase().indexOf(key.toLocaleLowerCase()) !==
+          -1 ||
+        user.lastName.toLocaleLowerCase().indexOf(key.toLocaleLowerCase()) !==
+          -1 ||
+        user.email.toLocaleLowerCase().indexOf(key.toLocaleLowerCase()) !==
+          -1 ||
+        user.contact.toLocaleLowerCase().indexOf(key.toLocaleLowerCase()) !==
+          -1 ||
+        user.userLocation
+          .toLocaleLowerCase()
+          .indexOf(key.toLocaleLowerCase()) !== -1 ||
+        user.userStore.toLocaleLowerCase().indexOf(key.toLocaleLowerCase()) !==
+          -1
+      ) {
+        results.push(user);
+      }
+    }
+
+    this.users = results; // append the users list with the newly found
+
+    if (results.length === 0 || !key) {
+      // If the key did not match any user or not truthy
+      this.getUsers();
+    }
+  }
+
+  // This will trigger the either the addUser, delete, or update modal
+  public onOpenModal(user: User | any, mode: string): void {
+    // first create button to trigger modal
+    const container = document.getElementById('main-container');
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.style.display = 'none';
+    button.setAttribute('data-toggle', 'modal');
+
+    // Added data-toggle attribute based on the mode
+    if (mode === 'add') {
+      button.setAttribute('data-target', '#addUserModal');
+    }
+    if (mode === 'edit') {
+      this.editUser = user;
+      button.setAttribute('data-target', '#updateUserModal');
+    }
+    if (mode === 'delete') {
+      this.deleteUser = user;
+      button.setAttribute('data-target', '#deleteUserModal');
+    }
+
+    // add the button to the main component
+    container?.appendChild(button);
+
+    // click the button
+    button.click();
+  }
+
   // This will listen to addUser form submission and call the BE
   public onAddUser(addForm: NgForm): void {
     document.getElementById('add-user-form')?.click(); // This will click the close btn automatically
@@ -140,35 +204,5 @@ export class UserComponent implements OnInit {
         alert(error.message);
       }
     );
-  }
-
-  // This will trigger the either the addUser, delete, or update modal
-  public onOpenModal(user: User | any, mode: string): void {
-    // first create button to trigger modal
-    const container = document.getElementById('main-container');
-
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.style.display = 'none';
-    button.setAttribute('data-toggle', 'modal');
-
-    // Added data-toggle attribute based on the mode
-    if (mode === 'add') {
-      button.setAttribute('data-target', '#addUserModal');
-    }
-    if (mode === 'edit') {
-      this.editUser = user;
-      button.setAttribute('data-target', '#updateUserModal');
-    }
-    if (mode === 'delete') {
-      this.deleteUser = user;
-      button.setAttribute('data-target', '#deleteUserModal');
-    }
-
-    // add the button to the main component
-    container?.appendChild(button);
-
-    // click the button
-    button.click();
   }
 }

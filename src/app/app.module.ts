@@ -12,6 +12,8 @@ import { StoreService } from './store/store.service';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
+import { ReservationComponent } from './reservation/reservation.component';
+import { ReservationService } from './reservation/reservation.service';
 
 @NgModule({
   declarations: [
@@ -20,9 +22,10 @@ import { FormsModule } from '@angular/forms';
     LocationComponent,
     StoreComponent,
     HomeComponent,
+    ReservationComponent,
   ],
   imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule],
-  providers: [UserService, LocationService, StoreService],
+  providers: [UserService, LocationService, StoreService, ReservationService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

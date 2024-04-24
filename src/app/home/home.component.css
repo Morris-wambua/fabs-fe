@@ -1,10 +1,11 @@
-a {
-  color: rgb(73, 173, 71);
-}
-a:hover {
-  color: blue;
+.nav-item a {
+  color: #5d8d94;
 }
 
-h3 {
-  color: rgb(202, 47, 4);
+.navbar-brand {
+  color: #5d8d94;
+}
+
+.jambo {
+  background-color: #5d8d94;
 }

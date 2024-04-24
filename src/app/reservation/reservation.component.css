@@ -1,0 +1,18 @@
+.main-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.side-nav {
+  background-color: #5d8d94;
+  width: 20%;
+  height: 950px;
+}
+.table-section {
+  display: flex;
+  flex-direction: column;
+}
+.add-btn {
+  width: 100px;
+}

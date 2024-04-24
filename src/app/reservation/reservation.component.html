@@ -1,0 +1,50 @@
+<h3>Reservations</h3>
+
+<div class="main-container">
+    <div class="side-nav">
+        Side Nav
+    </div>
+    <div class="table-section">
+        <button type="button" class="btn btn-primary btn-sm px-3 add-btn">
+            Add Reservation
+        </button>
+        <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Reservation</th>
+                <th scope="col">Date</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Store</th>
+                <th scope="col">Expert</th>
+                <th scope="col">Status</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let reservation of allReservations; index as i">
+                <th scope="row">{{i+1}}</th>
+                <td>{{reservation?.name}}</td>
+                <td>{{reservation?.reservationDate}}</td>
+                <td>{{reservation?.startTime}}</td>
+                <td>{{reservation?.endTime}}</td>
+                <td>{{reservation?.store}}</td>
+                <td>{{reservation?.reservationExpert}}</td>
+                <td>{{reservation?.status}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm px-3">
+                        Update
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm px-3">
+                        Cancel
+                    </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+</div>

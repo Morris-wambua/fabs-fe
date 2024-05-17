@@ -11,9 +11,11 @@ import { StoreComponent } from './store/store.component';
 import { StoreService } from './store/store.service';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReservationComponent } from './reservation/reservation.component';
 import { ReservationService } from './reservation/reservation.service';
+import { LoginComponent } from './login/login.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -23,8 +25,16 @@ import { ReservationService } from './reservation/reservation.service';
     StoreComponent,
     HomeComponent,
     ReservationComponent,
+    LoginComponent,
   ],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
   providers: [UserService, LocationService, StoreService, ReservationService],
   bootstrap: [AppComponent],
 })

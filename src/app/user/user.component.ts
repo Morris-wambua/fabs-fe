@@ -4,8 +4,6 @@ import { User } from './user';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocationService } from '../location/location.service';
 import { StoreService } from '../store/store.service';
-import { Store } from '../store/store';
-import { AppLocation } from '../location/appLocation';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -16,28 +14,8 @@ import { NgForm } from '@angular/forms';
 export class UserComponent implements OnInit {
   // create a parameter to hold the users
   public users: User[] = [];
-  public editUser: User = {
-    lastName: '',
-    firstName: '',
-    contact: '',
-    email: '',
-    image: '',
-    id: '',
-    userStore: '',
-    userLocation: '',
-    rating: 0,
-  };
-  public deleteUser: User = {
-    lastName: '',
-    firstName: '',
-    contact: '',
-    email: '',
-    image: '',
-    id: '',
-    userStore: '',
-    userLocation: '',
-    rating: 0,
-  };
+  public editUser!: User;
+  public deleteUser!: User;
 
   // create a constructor to call the userService
   constructor(

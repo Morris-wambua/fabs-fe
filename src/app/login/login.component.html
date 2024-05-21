@@ -42,6 +42,9 @@
                           <div class="form-floating mb-3">
                             <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com" required formControlName="username">
                             <p class= "login-warning" *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched ">Required field*</p>
+                           <p class="login-warning" *ngIf="loginForm.get('username')?.hasError('email') && loginForm.get('username')?.touched">
+                                Invalid email format*
+                              </p>
                             <label for="email" class="form-label">Email</label>
                           </div>
                         </div>

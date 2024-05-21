@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { UserComponent } from './user/user.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'api/users', component: UserComponent },
   { path: 'api/reservations', component: ReservationComponent },
   { path: 'api/login', component: LoginComponent },
+  { path: 'api/signup', component: SignupComponent },
 ];
 
 @NgModule({

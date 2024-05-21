@@ -9,3 +9,9 @@
 .jambo {
   background-color: #5d8d94;
 }
+
+.popular-item {
+  height: 750px;
+  width: 1045px;
+  opacity: 0.7;
+}

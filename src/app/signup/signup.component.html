@@ -5,8 +5,8 @@
         <div class="col-12 col-xxl-11">
           <div class="card border-light-subtle shadow-sm">
             <div class="row g-0">
-              <div class="col-12 col-md-6">
-                <img class="img-fluid rounded-start w-100 h-100 object-fit-cover" loading="lazy" src="./assets/img/login_main.png" alt="Welcome back you've been missed!">
+              <div class="col-12 col-md-6 logo-main-holder">
+                <img class="img-fluid rounded-start w-100 h-100 object-fit-cover logo-main" loading="lazy" src="./assets/img/login_main.png" alt="Thank you for choosing Fabs!">
               </div>
               <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
                 <div class="col-12 col-lg-11 col-xl-10">
@@ -19,7 +19,7 @@
                               <img src="./assets/img/fabs_logo.png" alt="BootstrapBrain Logo" width="175" height="57">
                             </a>
                           </div>
-                          <h4 class="text-center">Welcome back you've been missed!</h4>
+                          <h4 class="text-center"> <span class="primary-color">Sign up</span> with Fabs</h4>
                         </div>
                       </div>
                     </div>
@@ -30,28 +30,49 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
                                 <path d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z"/>
                               </svg>
-                            <span class="ms-2 fs-6"> Log in with Google</span>
+                            <span class="ms-2 fs-6"> Sign up with Google</span>
                           </a>
                         </div>
-                        <p class="text-center mt-4 mb-5">Or sign in with</p>
+                        <p class="text-center mt-4 mb-5">Or sign up with</p>
                       </div>
                     </div>
-                    <form action="#!" [formGroup]="loginForm">
+                    <form action="#!">
                       <div class="row gy-3 overflow-hidden">
                         <div class="col-12">
                           <div class="form-floating mb-3">
-                            <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com" required formControlName="username">
-                            <p class= "login-warning" *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched ">Required field*</p>
-                            <label for="email" class="form-label">Email</label>
+                            <input type="text" class="form-control" name="firstName" id="firstName" placeholder="John" required formControlName="firstName">
+                            <!-- <p class= "login-warning" *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched ">Required field*</p> -->
+                            <label for="firstName" class="form-label">First Name</label>
                           </div>
                         </div>
                         <div class="col-12">
+                            <div class="form-floating mb-3">
+                              <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Doe" required formControlName="lastname">
+                              <!-- <p class= "login-warning" *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched ">Required field*</p> -->
+                              <label for="lastName" class="form-label">Last Name</label>
+                            </div>
+                          </div>
+                          <div class="col-12">
+                            <div class="form-floating mb-3">
+                              <input type="email" class="form-control" name="email" id="email" placeholder="name@gmail.com" required formControlName="email">
+                              <!-- <p class= "login-warning" *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched ">Required field*</p> -->
+                              <label for="email" class="form-label">Email</label>
+                            </div>
+                          </div>
+                        <div class="col-12">
                           <div class="form-floating mb-3">
                             <input type="password" class="form-control" name="password" id="password" value="" placeholder="Password" required formControlName="password">
-                            <p class= "login-warning" *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched ">Incorrect password*</p>
+                            <!-- <p class= "login-warning" *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched ">Incorrect password*</p> -->
                             <label for="password" class="form-label">Password</label>
                           </div>
                         </div>
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                              <input type="password" class="form-control" name="password-repeat" id="password-repeat" value="" placeholder="Repeat Password" required formControlName="password-repeat">
+                              <!-- <p class= "login-warning" *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched ">Incorrect password*</p> -->
+                              <label for="password" class="form-label">Repeat Password</label>
+                            </div>
+                          </div>
                         <div class="col-12">
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" name="remember_me" id="remember_me">
@@ -62,18 +83,14 @@
                         </div>
                         <div class="col-12">
                           <div class="d-grid">
-                            <button class="btn btn-dark btn-lg" type="submit">Log in now</button>
+                            <button class="btn btn-dark btn-lg" type="submit">Create Account</button>
                           </div>
                         </div>
                       </div>
                     </form>
                     <div class="row redirect">
                       <div class="col-12">
-                        <span class="primary-color">Don't have an account? </span><a routerLink="/api/signup" class="link-secondary text-decoration-none"><span class="secondary-color">Create Account</span></a>
-                      </div>
-                      <br>
-                      <div class="col-12">
-                        <span class="primary-color">Forgot Password? </span><a routerLink="/api/signup" class="link-secondary text-decoration-none"><span class="secondary-color">Reset</span></a>
+                        <span class="primary-color">Already have an account? </span><a routerLink="/api/login" class="link-secondary text-decoration-none"><span class="secondary-color">Sign In</span></a>
                       </div>
                     </div>
                   </div>

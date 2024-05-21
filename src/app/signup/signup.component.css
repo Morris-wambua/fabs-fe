@@ -17,3 +17,6 @@
 .redirect {
   padding-top: 10px;
 }
+.login-warning {
+  color: red;
+}

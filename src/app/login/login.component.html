@@ -36,7 +36,7 @@
                         <p class="text-center mt-4 mb-5">Or sign in with</p>
                       </div>
                     </div>
-                    <form action="#!" [formGroup]="loginForm">
+                    <form action="#!" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                       <div class="row gy-3 overflow-hidden">
                         <div class="col-12">
                           <div class="form-floating mb-3">
@@ -49,6 +49,7 @@
                           <div class="form-floating mb-3">
                             <input type="password" class="form-control" name="password" id="password" value="" placeholder="Password" required formControlName="password">
                             <p class= "login-warning" *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched ">Incorrect password*</p>
+                            <p class= "login-warning" *ngIf="loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched ">Short password, enter at lest 8 characters*</p>
                             <label for="password" class="form-label">Password</label>
                           </div>
                         </div>

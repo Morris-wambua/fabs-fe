@@ -17,6 +17,5 @@
 
 .login-btn:hover,
 .signup-btn:hover {
-  background-color: rgb(132, 216, 231);
-  color: #5d8d94;
+  background-color: #5d8d94;
 }

@@ -10,6 +10,7 @@ import { SignupService } from './signup.service';
 import { LoginUser } from '../login/LoginUser';
 import { SignUpRequest } from './SignUpRequest';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -23,7 +24,7 @@ export class SignupComponent implements OnInit {
 
   registrationData!: SignUpRequest;
 
-  constructor(private signupService: SignupService) {}
+  constructor(private signupService: SignupService, private router: Router) {}
 
   ngOnInit(): void {
     this.signUpForm = new FormGroup(
@@ -70,6 +71,9 @@ export class SignupComponent implements OnInit {
         (response: LoginUser) => {
           this.loggedInUser = response;
           console.log(response);
+
+          // Redirect to the login page
+          this.router.navigate(['api/login']);
         },
         (error: HttpErrorResponse) => {
           console.log(

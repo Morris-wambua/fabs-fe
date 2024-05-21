@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { UserComponent } from './user/user.component';
 import { UserService } from './user/user.service';
 import { LocationComponent } from './location/location.component';
@@ -18,6 +18,8 @@ import { LoginComponent } from './login/login.component';
 import { CommonModule } from '@angular/common';
 import { SignupComponent } from './signup/signup.component';
 import { LoginService } from './login/login.service';
+import { AuthInterceptorService } from './interceptors/auth.service';
+import { AuthService } from './auth.service';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,12 @@ import { LoginService } from './login/login.service';
     StoreService,
     ReservationService,
     LoginService,
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

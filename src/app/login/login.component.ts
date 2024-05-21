@@ -5,6 +5,7 @@ import { Login } from './login';
 import { LoginUser } from './LoginUser';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,11 @@ export class LoginComponent implements OnInit {
   loginDetails!: Login;
   loggedInUser!: LoginUser;
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(
+    private loginService: LoginService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -43,8 +48,11 @@ export class LoginComponent implements OnInit {
           this.loggedInUser = response;
           console.log(response);
 
+          // Save the token in local storage
+          this.authService.setAuthToken(this.loggedInUser.token);
+
           // Redirect to the dashboard
-          this.router.navigate(['api/users']);
+          this.router.navigate(['api/reservations']);
         },
         (error: HttpErrorResponse) => {
           console.log('Sorry we could not log in the user: ', error.message);

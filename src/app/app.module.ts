@@ -16,6 +16,7 @@ import { ReservationComponent } from './reservation/reservation.component';
 import { ReservationService } from './reservation/reservation.service';
 import { LoginComponent } from './login/login.component';
 import { CommonModule } from '@angular/common';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { CommonModule } from '@angular/common';
     HomeComponent,
     ReservationComponent,
     LoginComponent,
+    SignupComponent,
   ],
   imports: [
     CommonModule,

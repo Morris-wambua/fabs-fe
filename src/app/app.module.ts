@@ -17,6 +17,7 @@ import { ReservationService } from './reservation/reservation.service';
 import { LoginComponent } from './login/login.component';
 import { CommonModule } from '@angular/common';
 import { SignupComponent } from './signup/signup.component';
+import { LoginService } from './login/login.service';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,13 @@ import { SignupComponent } from './signup/signup.component';
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [UserService, LocationService, StoreService, ReservationService],
+  providers: [
+    UserService,
+    LocationService,
+    StoreService,
+    ReservationService,
+    LoginService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

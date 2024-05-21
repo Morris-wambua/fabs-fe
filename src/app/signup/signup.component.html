@@ -36,40 +36,47 @@
                         <p class="text-center mt-4 mb-5">Or sign up with</p>
                       </div>
                     </div>
-                    <form action="#!">
+                    <form action="#!" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
                       <div class="row gy-3 overflow-hidden">
                         <div class="col-12">
                           <div class="form-floating mb-3">
                             <input type="text" class="form-control" name="firstName" id="firstName" placeholder="John" required formControlName="firstName">
-                            <!-- <p class= "login-warning" *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched ">Required field*</p> -->
+                            <p class= "login-warning" *ngIf="signUpForm.get('firstName')?.hasError('required') && signUpForm.get('firstName')?.touched ">Required field*</p>
                             <label for="firstName" class="form-label">First Name</label>
                           </div>
                         </div>
                         <div class="col-12">
                             <div class="form-floating mb-3">
-                              <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Doe" required formControlName="lastname">
-                              <!-- <p class= "login-warning" *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched ">Required field*</p> -->
+                              <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Doe" required formControlName="lastName">
+                              <p class= "login-warning" *ngIf="signUpForm.get('lastName')?.hasError('required') && signUpForm.get('lastName')?.touched ">Required field*</p>
                               <label for="lastName" class="form-label">Last Name</label>
                             </div>
                           </div>
                           <div class="col-12">
                             <div class="form-floating mb-3">
-                              <input type="email" class="form-control" name="email" id="email" placeholder="name@gmail.com" required formControlName="email">
-                              <!-- <p class= "login-warning" *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched ">Required field*</p> -->
+                              <input type="email" class="form-control" name="username" id="username" placeholder="name@gmail.com" required formControlName="username">
+                              <p class="login-warning" *ngIf="signUpForm.get('username')?.hasError('required') && signUpForm.get('username')?.touched">
+                                Required*
+                              </p>
+                              <p class="login-warning" *ngIf="signUpForm.get('username')?.hasError('email') && signUpForm.get('username')?.touched">
+                                Invalid email format*
+                              </p>
                               <label for="email" class="form-label">Email</label>
                             </div>
                           </div>
                         <div class="col-12">
                           <div class="form-floating mb-3">
                             <input type="password" class="form-control" name="password" id="password" value="" placeholder="Password" required formControlName="password">
-                            <!-- <p class= "login-warning" *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched ">Incorrect password*</p> -->
+                            <p class= "login-warning" *ngIf="signUpForm.get('password')?.hasError('required') && signUpForm.get('password')?.touched ">Incorrect password*</p>
+                            <p class= "login-warning" *ngIf="signUpForm.get('password')?.hasError('minlength') && signUpForm.get('password')?.touched ">Short password, enter at lest 8 characters*</p>
                             <label for="password" class="form-label">Password</label>
                           </div>
                         </div>
                         <div class="col-12">
                             <div class="form-floating mb-3">
-                              <input type="password" class="form-control" name="password-repeat" id="password-repeat" value="" placeholder="Repeat Password" required formControlName="password-repeat">
-                              <!-- <p class= "login-warning" *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched ">Incorrect password*</p> -->
+                              <input type="password" class="form-control" name="passwordRepeat" id="passwordRepeat" value="" placeholder="Repeat Password" required formControlName="passwordRepeat">
+                              <p class= "login-warning" *ngIf="signUpForm.get('passwordRepeat')?.hasError('required') && signUpForm.get('passwordRepeat')?.touched">Required*</p>
+                              <p class="login-warning" *ngIf="signUpForm.hasError('passwordsMismatch') && signUpForm.get('passwordRepeat')?.touched">The password does not match!</p>
                               <label for="password" class="form-label">Repeat Password</label>
                             </div>
                           </div>

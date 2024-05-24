@@ -20,6 +20,7 @@ import { SignupComponent } from './signup/signup.component';
 import { LoginService } from './login/login.service';
 import { AuthInterceptorService } from './interceptors/auth.service';
 import { AuthService } from './auth.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { AuthService } from './auth.service';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     UserService,

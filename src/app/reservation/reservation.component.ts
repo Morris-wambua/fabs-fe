@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ReservationService } from './reservation.service';
 import { Reservation } from './Reservation';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-reservation',
@@ -12,10 +11,10 @@ import { AuthService } from '../auth.service';
 })
 export class ReservationComponent implements OnInit {
   public allReservations: Reservation[] = [];
+  public isSidebarVisible: boolean = true;
 
   constructor(
     private reservationService: ReservationService,
-    private authService: AuthService,
     private router: Router
   ) {}
 

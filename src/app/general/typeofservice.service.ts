@@ -11,21 +11,21 @@ export class TypeofserviceService {
   constructor(private http: HttpClient) {}
   private apiBaseUrl = environment.apiBaseUrl;
 
-  // Fetch all type of services
+  // Fetch all type of services(TOS)
   public getAllServices(): Observable<TypeOfService[]> {
     return this.http.get<TypeOfService[]>(
       `${this.apiBaseUrl}/api/typeOfServices`
     );
   }
 
-  // Fetch reservation by Id
+  // Fetch TOS by Id
   public getService(id: string): Observable<TypeOfService> {
     return this.http.get<TypeOfService>(
       `${this.apiBaseUrl}/api/typeOfServices/${id}`
     );
   }
 
-  // Add reservation
+  // Add TOS
   public addService(service: TypeOfService): Observable<string> {
     return this.http.post<string>(
       `${this.apiBaseUrl}/api/typeOfServices`,
@@ -33,7 +33,7 @@ export class TypeofserviceService {
     );
   }
 
-  // Update reservation
+  // Update TOS
   public updateService(id: string, service: TypeOfService): Observable<string> {
     return this.http.put<string>(
       `${this.apiBaseUrl}/api/typeOfServices/${id}`,
@@ -41,7 +41,7 @@ export class TypeofserviceService {
     );
   }
 
-  // Delete reservation
+  // Delete TOS
   public deleteService(id: string): Observable<void> {
     return this.http.delete<void>(
       `${this.apiBaseUrl}/api/typeOfServices/${id}`

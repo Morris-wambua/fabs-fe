@@ -21,6 +21,10 @@ import { LoginService } from './login/login.service';
 import { AuthInterceptorService } from './interceptors/auth.service';
 import { AuthService } from './auth.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ExpertComponent } from './expert/expert.component';
+import { TypeOfService } from './general/TypeOfService';
+import { TypeofserviceService } from './general/typeofservice.service';
+import { ExpertService } from './expert/expert.service';
 
 @NgModule({
   declarations: [
@@ -32,6 +36,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReservationComponent,
     LoginComponent,
     SignupComponent,
+    ExpertComponent,
   ],
   imports: [
     CommonModule,
@@ -49,6 +54,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReservationService,
     LoginService,
     AuthService,
+    TypeofserviceService,
+    ExpertService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,

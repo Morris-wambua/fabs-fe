@@ -9,6 +9,8 @@ import { TypeofserviceService } from '../general/typeofservice.service';
 import { tap } from 'rxjs';
 import { StoreService } from '../store/store.service';
 import { Store } from '../store/store';
+import { ExpertService } from '../expert/expert.service';
+import { Expert } from '../expert/expert';
 
 @Component({
   selector: 'app-reservation',
@@ -22,14 +24,16 @@ export class ReservationComponent implements OnInit {
   public username!: string;
   public reservationToDelete: Reservation | null = null;
   public addReservationForm!: FormGroup; // declare an empty form
-  typeOfServices: TypeOfService[] = [];
-  stores: Store[] = [];
-  availableTimes: string[] = [];
+  public typeOfServices: TypeOfService[] = [];
+  public stores: Store[] = [];
+  public experts: Expert[] = [];
+  public availableTimes: string[] = [];
 
   constructor(
     private reservationService: ReservationService,
     private tosService: TypeofserviceService,
     private storeService: StoreService,
+    private expertService: ExpertService,
     private router: Router,
     private fb: FormBuilder
   ) {}
@@ -59,6 +63,8 @@ export class ReservationComponent implements OnInit {
       reservationExpert: [{ value: '', disabled: true }, Validators.required],
       status: [''],
     });
+
+    this.onStoreChange();
   }
 
   // This controls any modals opening on the reservation page
@@ -199,6 +205,35 @@ export class ReservationComponent implements OnInit {
       });
   }
 
+  // Listen dynamically for store change
+  public onStoreChange(): void {
+    this.addReservationForm
+      .get('store')
+      ?.valueChanges.subscribe((selectedStoreName) => {
+        const selectedStore = this.stores.find(
+          (store) => store.name === selectedStoreName
+        );
+        if (selectedStore) {
+          this.fetchExpertsByStore(selectedStore.id);
+        }
+      });
+  }
+
+  // fetchExpertsByStore
+  private fetchExpertsByStore(storeId: string): void {
+    this.expertService
+      .getExpertsByStore(storeId)
+      .pipe(
+        tap((experts: Expert[]) => {
+          this.experts = experts;
+        })
+      )
+      .subscribe({
+        error: (error) => {
+          console.error('Error fetching experts:', error);
+        },
+      });
+  }
   // Create chunks for available time
   private generateTimeOptions(): void {
     // Generate time options for a 24-hour clock

@@ -96,3 +96,21 @@
     margin-left: -15rem;
   }
 }
+
+/* Custom CSS for the form width */
+@media (min-width: 600px) {
+  #addReservationModal .modal-dialog {
+    max-width: 1000px;
+  }
+}
+
+#addReservationModal .modal-body form {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#addReservationModal .modal-body .form-control,
+#addReservationModal .modal-body .form-select {
+  width: 100%;
+  max-width: 100%;
+}

@@ -19,4 +19,20 @@ export class AuthService {
       window.localStorage.removeItem('auth_token');
     }
   }
+
+  public setName(name: string): void {
+    if (name !== null) {
+      window.localStorage.setItem('name', name);
+    } else {
+      window.localStorage.removeItem('name');
+    }
+  }
+
+  public setUsername(username: string): void {
+    if (username !== null) {
+      window.localStorage.setItem('username', username);
+    } else {
+      window.localStorage.removeItem('username');
+    }
+  }
 }

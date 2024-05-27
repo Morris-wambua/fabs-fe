@@ -51,6 +51,13 @@ export class LoginComponent implements OnInit {
           // Save the token in local storage
           this.authService.setAuthToken(this.loggedInUser.token);
 
+          // Save the login User
+          this.authService.setUsername(this.loggedInUser.firstName);
+
+          // update localStorage with the user and username
+          this.authService.setName(this.loggedInUser.firstName);
+          this.authService.setUsername(this.loggedInUser.login);
+
           // Redirect to the dashboard
           this.router.navigate(['api/reservations']);
         },

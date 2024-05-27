@@ -184,12 +184,12 @@
                                         <label for="firstName" class="form-label">Type of Reservation</label>
                                         <input formControlName="name" class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
                                             <datalist id="datalistOptions">
-                                                <option *ngFor="let service of typeOfServices" [value]="service.name"> - {{service.price}}</option>
+                                                <option *ngFor="let service of typeOfServices" [value]="service.name"> - {{service.price}} KES</option>
                                                 <option>Others</option>
                                             </datalist>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="price" class="form-label">Price</label>
+                                        <label for="price" class="form-label">Price (KES)</label>
                                         <input formControlName="price" type="text" class="form-control disabled" id="price" readonly>
                                     </div>
                                     <div class="col-md-6">
@@ -202,10 +202,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="expert" class="form-label">Expert</label>
-                                        <input formControlName="expert" class="form-control" list="availableExperts" id="expert" placeholder="Type to search...">
-                                            <datalist id="availableExperts">
-                                                <option *ngFor="let service of typeOfServices" [value]="service.category"> - {{service.price}}</option>
-                                                <option>Others</option>
+                                        <input formControlName="expert" class="form-control" list="expertList" id="expert" placeholder="Type to search...">
+                                            <datalist id="expertList">
+                                                <option *ngFor="let expert of experts" [value]="expert.name"> - {{expert.ratings}} stars ratings</option>
                                             </datalist>
                                     </div>
                                     <div class="col-md-6" style="display: none;">

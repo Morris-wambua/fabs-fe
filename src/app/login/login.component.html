@@ -42,9 +42,10 @@
                           <div class="form-floating mb-3">
                             <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com" required formControlName="username">
                             <p class= "login-warning" *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched ">Required field*</p>
-                           <p class="login-warning" *ngIf="loginForm.get('username')?.hasError('email') && loginForm.get('username')?.touched">
+                            <p class= "login-warning" *ngIf="loginForm.get('username')?.hasError('email') && loginForm.get('username')?.touched">
                                 Invalid email format*
-                              </p>
+                            </p>
+                            <p class="login-warning" *ngIf="usernameError">{{ usernameError }}</p>
                             <label for="email" class="form-label">Email</label>
                           </div>
                         </div>
@@ -53,6 +54,7 @@
                             <input type="password" class="form-control" name="password" id="password" value="" placeholder="Password" required formControlName="password">
                             <p class= "login-warning" *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched ">Incorrect password*</p>
                             <p class= "login-warning" *ngIf="loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched ">Short password, enter at lest 8 characters*</p>
+                            <p class="login-warning" *ngIf="passwordError">{{ passwordError }}</p>
                             <label for="password" class="form-label">Password</label>
                           </div>
                         </div>

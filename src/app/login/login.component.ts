@@ -16,6 +16,8 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup; // declare an empty form
   loginDetails!: Login;
   loggedInUser!: LoginUser;
+  usernameError: string = '';
+  passwordError: string = '';
 
   constructor(
     private loginService: LoginService,
@@ -35,6 +37,10 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    // Clear previous error messages
+    this.usernameError = '';
+    this.passwordError = '';
+
     if (this.loginForm.valid) {
       // Map the form data to login object
       this.loginDetails = {
@@ -62,8 +68,14 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['api/reservations']);
         },
         (error: HttpErrorResponse) => {
-          console.log('Sorry we could not log in the user: ', error.message);
-          alert(error.message);
+          // Handle specific error statuses
+          if (error.status === 404) {
+            this.usernameError = "The user doesn't exist";
+          } else if (error.status === 400) {
+            this.passwordError = 'Wrong password*';
+          } else {
+            alert(error.message);
+          }
         }
       );
 

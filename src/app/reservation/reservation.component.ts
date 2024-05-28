@@ -44,7 +44,6 @@ export class ReservationComponent implements OnInit {
     this.initializeForm();
     this.fetchTypeOfServices();
     this.onReservationTypeChange();
-    this.generateTimeOptions();
     this.fetchStores();
   }
 
@@ -65,6 +64,8 @@ export class ReservationComponent implements OnInit {
     });
 
     this.onStoreChange();
+    this.onExpertChange();
+    this.onDateChange();
   }
 
   // This controls any modals opening on the reservation page
@@ -234,12 +235,51 @@ export class ReservationComponent implements OnInit {
         },
       });
   }
-  // Create chunks for available time
-  private generateTimeOptions(): void {
-    // Generate time options for a 24-hour clock
-    for (let i = 0; i < 24; i++) {
-      const time = `${i.toString().padStart(2, '0')}:00`; // Format as 'HH:00'
-      this.availableTimes.push(time);
+
+  // Listen dynamically for expert change
+  public onExpertChange(): void {
+    this.addReservationForm
+      .get('expert')
+      ?.valueChanges.subscribe((selectedExpertName) => {
+        const selectedExpert = this.experts.find(
+          (expert) => expert.name === selectedExpertName
+        );
+        if (selectedExpert) {
+          this.updateAvailableTimes(selectedExpert.id);
+        }
+      });
+  }
+
+  // Listen dynamically for date change
+  public onDateChange(): void {
+    this.addReservationForm
+      .get('reservationDate')
+      ?.valueChanges.subscribe(() => {
+        const selectedExpertName = this.addReservationForm.get('expert')?.value;
+        if (selectedExpertName) {
+          const selectedExpert = this.experts.find(
+            (expert) => expert.name === selectedExpertName
+          );
+          if (selectedExpert) {
+            this.updateAvailableTimes(selectedExpert.id);
+          }
+        }
+      });
+  }
+
+  // Update available time slots based on selected expert and date
+  private updateAvailableTimes(expertId: string): void {
+    const date = this.addReservationForm.get('reservationDate')?.value;
+
+    if (expertId && date) {
+      this.expertService.getAvailableTimeSlots(expertId, date).subscribe(
+        (times: string[]) => {
+          this.availableTimes = times;
+        },
+        (error: HttpErrorResponse) => {
+          console.error('Error fetching available time slots:', error);
+        }
+      );
     }
   }
 }

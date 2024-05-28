@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
 import { Expert } from './expert';
@@ -45,5 +45,17 @@ export class ExpertService {
   // delete Expert
   public delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiServerUrl}/api/experts/${id}`);
+  }
+
+  // Fetch available slots
+  public getAvailableTimeSlots(
+    expertId: string,
+    date: string
+  ): Observable<string[]> {
+    let params = new HttpParams().set('expertId', expertId).set('date', date);
+    return this.http.get<string[]>(
+      `${this.apiServerUrl}/api/experts/timeslots`,
+      { params }
+    );
   }
 }

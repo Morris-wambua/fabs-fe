@@ -211,6 +211,10 @@
                                         <label for="reservationExpert" class="form-label">Reservation Expert</label>
                                         <input formControlName="reservationExpert" type="text" class="form-control disabled" id="reservationExpert" readonly>
                                     </div>
+                                    <div class="col-md-6" style="display: none;">
+                                        <label for="typeOfService" class="form-label">Type of Service</label>
+                                        <input formControlName="typeOfService" type="text" class="form-control disabled" id="name" readonly>
+                                    </div>
                                     <div class="col-md-6">
                                         <label for="reservationDate" class="form-label">Reservation Date</label>
                                         <input formControlName="reservationDate" type="date" class="form-control" id="reservationDate">
@@ -238,8 +242,8 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    <div class="text-center col-12">
+                                        <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
                                         <button type="reset" class="btn btn-secondary">Reset</button>
                                     </div>
                                 </form>

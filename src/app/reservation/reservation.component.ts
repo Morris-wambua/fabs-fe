@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ReservationService } from './reservation.service';
-import { Reservation } from './Reservation';
+import { Reservation, ReservationStatus } from './Reservation';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -28,6 +28,7 @@ export class ReservationComponent implements OnInit {
   public stores: Store[] = [];
   public experts: Expert[] = [];
   public availableTimes: string[] = [];
+  public reservationRequest!: Reservation;
 
   constructor(
     private reservationService: ReservationService,
@@ -44,14 +45,13 @@ export class ReservationComponent implements OnInit {
     this.initializeForm();
     this.fetchTypeOfServices();
     this.onReservationTypeChange();
-    this.generateTimeOptions();
     this.fetchStores();
   }
 
   // This will initialize the add reservation form
   private initializeForm(): void {
     this.addReservationForm = this.fb.group({
-      id: ['', Validators.required],
+      id: [''],
       name: ['', Validators.required],
       price: [{ value: '', disabled: true }, Validators.required],
       reservationDate: [''],
@@ -65,6 +65,8 @@ export class ReservationComponent implements OnInit {
     });
 
     this.onStoreChange();
+    this.onExpertChange();
+    this.onDateChange();
   }
 
   // This controls any modals opening on the reservation page
@@ -234,12 +236,126 @@ export class ReservationComponent implements OnInit {
         },
       });
   }
-  // Create chunks for available time
-  private generateTimeOptions(): void {
-    // Generate time options for a 24-hour clock
-    for (let i = 0; i < 24; i++) {
-      const time = `${i.toString().padStart(2, '0')}:00`; // Format as 'HH:00'
-      this.availableTimes.push(time);
+
+  // Listen dynamically for expert change
+  public onExpertChange(): void {
+    this.addReservationForm
+      .get('expert')
+      ?.valueChanges.subscribe((selectedExpertName) => {
+        const selectedExpert = this.experts.find(
+          (expert) => expert.name === selectedExpertName
+        );
+        if (selectedExpert) {
+          this.updateAvailableTimes(selectedExpert.id);
+          this.addReservationForm
+            .get('reservationExpert')
+            ?.setValue(selectedExpert.id);
+        }
+      });
+  }
+
+  // Listen dynamically for date change
+  public onDateChange(): void {
+    this.addReservationForm
+      .get('reservationDate')
+      ?.valueChanges.subscribe(() => {
+        const selectedExpertName = this.addReservationForm.get('expert')?.value;
+        if (selectedExpertName) {
+          const selectedExpert = this.experts.find(
+            (expert) => expert.name === selectedExpertName
+          );
+          if (selectedExpert) {
+            this.updateAvailableTimes(selectedExpert.id);
+          }
+        }
+      });
+  }
+
+  // Update available time slots based on selected expert and date
+  private updateAvailableTimes(expertId: string): void {
+    const date = this.addReservationForm.get('reservationDate')?.value;
+
+    if (expertId && date) {
+      this.expertService.getAvailableTimeSlots(expertId, date).subscribe(
+        (times: string[]) => {
+          this.availableTimes = times;
+        },
+        (error: HttpErrorResponse) => {
+          console.error('Error fetching available time slots:', error);
+        }
+      );
     }
+  }
+
+  onSubmit(): void {
+    if (this.addReservationForm.valid) {
+      let finalExpertId = '';
+      const formExpertName = this.addReservationForm.get('expert')?.value;
+      if (formExpertName) {
+        const expertId = this.experts.find((ex) => ex.name === formExpertName);
+        if (expertId) {
+          finalExpertId = expertId.id;
+        }
+      }
+
+      let finalTos = '';
+      const nameValue = this.addReservationForm.get('name')?.value;
+      if (nameValue) {
+        const tos = this.typeOfServices.find((s) => s.name === nameValue);
+        if (tos) {
+          finalTos = tos.id;
+        }
+      }
+
+      // Recompile the addReservation request
+      this.reservationRequest = {
+        id: '',
+        name: this.addReservationForm.get('name')?.value,
+        price: this.addReservationForm.get('price')?.value,
+        reservationDate: this.addReservationForm.get('reservationDate')?.value,
+        startTime: this.addReservationForm.get('startTime')?.value,
+        endTime: this.addReservationForm.get('endTime')?.value,
+        store: this.addReservationForm.get('store')?.value,
+        typeOfService: '2a07f1e0-0f27-4f38-b801-c2d6fd486bcc',
+        expert: finalExpertId,
+        reservationExpert:
+          this.addReservationForm.get('reservationExpert')?.value,
+        status: ReservationStatus.IN_PROGRESS,
+      };
+
+      // Send the request to the backend
+      this.reservationService.addReservation(this.reservationRequest).subscribe(
+        (response: any) => {
+          console.log('Reservation created successfully', response);
+          this.fetchReservations();
+        },
+        (error: HttpErrorResponse) => {
+          console.log('Error creating reservation:', error.message);
+          alert(error.message);
+        }
+      );
+    } else {
+      console.log('The add reservation is invalid');
+      this.logFormErrors(this.addReservationForm);
+      alert('Invalid form');
+    }
+  }
+
+  private logFormErrors(group: FormGroup): void {
+    Object.keys(group.controls).forEach((key: string) => {
+      const controlErrors = group.get(key)?.errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach((errorKey: string) => {
+          console.log(
+            `Key: ${key}, Error: ${errorKey}, Value: ${controlErrors[errorKey]}`
+          );
+        });
+      }
+      // If the control is a FormGroup, recursively log its errors
+      const control = group.get(key);
+      if (control instanceof FormGroup) {
+        this.logFormErrors(control);
+      }
+    });
   }
 }

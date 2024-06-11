@@ -185,8 +185,12 @@ export class ReservationComponent implements OnInit {
         );
         if (selectedService) {
           this.addReservationForm.get('price')?.setValue(selectedService.price);
+          this.addReservationForm
+            .get('typeOfService')
+            ?.setValue(selectedService.id); // Ensure the typeOfService gets a value
         } else {
           this.addReservationForm.get('price')?.reset();
+          this.addReservationForm.get('typeOfService')?.reset(); // Reset typeOfService if no service is selected
         }
       });
   }
@@ -281,81 +285,73 @@ export class ReservationComponent implements OnInit {
           this.availableTimes = times;
         },
         (error: HttpErrorResponse) => {
-          console.error('Error fetching available time slots:', error);
+          alert(error.message);
+          console.log(error.message);
         }
       );
     }
   }
 
-  onSubmit(): void {
+  // get next hour
+  public getNextHour(time: string): string {
+    const [hour, minute] = time.split(':').map(Number);
+    const nextHour = hour === 23 ? 0 : hour + 1;
+    return `${String(nextHour).padStart(2, '0')}:${String(minute).padStart(
+      2,
+      '0'
+    )}`;
+  }
+
+  public onSubmit(): void {
     if (this.addReservationForm.valid) {
-      let finalExpertId = '';
-      const formExpertName = this.addReservationForm.get('expert')?.value;
-      if (formExpertName) {
-        const expertId = this.experts.find((ex) => ex.name === formExpertName);
-        if (expertId) {
-          finalExpertId = expertId.id;
-        }
-      }
+      const formValues = this.addReservationForm.value;
 
-      let finalTos = '';
-      const nameValue = this.addReservationForm.get('name')?.value;
-      if (nameValue) {
-        const tos = this.typeOfServices.find((s) => s.name === nameValue);
-        if (tos) {
-          finalTos = tos.id;
-        }
-      }
+      // 1. set endTime based on the startTime
+      const startTime = formValues.startTime;
+      const endTime = this.getNextHour(startTime);
 
-      // Recompile the addReservation request
-      this.reservationRequest = {
-        id: '',
-        name: this.addReservationForm.get('name')?.value,
-        price: this.addReservationForm.get('price')?.value,
-        reservationDate: this.addReservationForm.get('reservationDate')?.value,
-        startTime: this.addReservationForm.get('startTime')?.value,
-        endTime: this.addReservationForm.get('endTime')?.value,
-        store: this.addReservationForm.get('store')?.value,
-        typeOfService: '2a07f1e0-0f27-4f38-b801-c2d6fd486bcc',
-        expert: finalExpertId,
-        reservationExpert:
-          this.addReservationForm.get('reservationExpert')?.value,
+      // 2. Convert store name to store ID
+      const selectedStore = this.stores.find(
+        (store) => store.name === formValues.store
+      );
+      const storeId = selectedStore ? selectedStore.id : null;
+
+      // 3. Convert expert name to expert ID
+      const selectedExpert = this.experts.find(
+        (expert) => expert.name === formValues.expert
+      );
+      const expertId = selectedExpert ? selectedExpert.id : null;
+
+      // 4. Convert type of service name to ID and fetch the price
+      const selectedService = this.typeOfServices.find(
+        (service) => service.name === formValues.name
+      );
+      const serviceId = selectedService ? selectedService.id : null;
+      const price = selectedService ? selectedService.price : null;
+
+      // Prepare the final reservation object
+      const reservation: Reservation = {
+        ...formValues,
+        endTime: endTime,
+        store: storeId,
+        reservationExpert: expertId,
         status: ReservationStatus.IN_PROGRESS,
+        typeOfService: serviceId,
+        price: price,
       };
 
-      // Send the request to the backend
-      this.reservationService.addReservation(this.reservationRequest).subscribe(
+      this.reservationService.addReservation(reservation).subscribe(
         (response: any) => {
-          console.log('Reservation created successfully', response);
+          console.log('Reservation added successfully', response);
           this.fetchReservations();
         },
         (error: HttpErrorResponse) => {
-          console.log('Error creating reservation:', error.message);
           alert(error.message);
+          console.log(error.message);
         }
       );
     } else {
-      console.log('The add reservation is invalid');
-      this.logFormErrors(this.addReservationForm);
-      alert('Invalid form');
+      console.log('Form is invalid');
     }
-  }
-
-  private logFormErrors(group: FormGroup): void {
-    Object.keys(group.controls).forEach((key: string) => {
-      const controlErrors = group.get(key)?.errors;
-      if (controlErrors != null) {
-        Object.keys(controlErrors).forEach((errorKey: string) => {
-          console.log(
-            `Key: ${key}, Error: ${errorKey}, Value: ${controlErrors[errorKey]}`
-          );
-        });
-      }
-      // If the control is a FormGroup, recursively log its errors
-      const control = group.get(key);
-      if (control instanceof FormGroup) {
-        this.logFormErrors(control);
-      }
-    });
   }
 }

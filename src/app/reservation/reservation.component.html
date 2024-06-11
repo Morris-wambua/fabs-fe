@@ -5,6 +5,9 @@
             <div class="sidebar-heading text-center py-4 fs-4 fw-bold border-bottom" brand-icon><img src="./assets/img/fabs_logo.png" alt="logo" class="logo-image">
             </div>
             <div class="list-group list-group-flush my-3">
+                <span class="list-group-item list-group-item-action bg-transparent second-text fw-bold" (click)="onOpenModal(null, 'add')">
+                    <i class="fas fa-shopping-cart me-2"></i>Add Reservations
+                </span>
                 <a href="#" class="list-group-item list-group-item-action bg-transparent second-text active"><i
                         class="fas fa-tachometer-alt me-2"></i>Analytics</a>
                 <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
@@ -13,9 +16,6 @@
                         class="fas fa-chart-line me-2"></i>Discounts</a>
                 <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-paperclip me-2"></i>Reports</a>
-                <span class="list-group-item list-group-item-action bg-transparent second-text fw-bold" (click)="onOpenModal(null, 'add')">
-                    <i class="fas fa-shopping-cart me-2"></i>Add Reservations
-                </span>
                 <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-gift me-2"></i>Products</a>
                 <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
@@ -169,91 +169,84 @@
                 <!-- end of deletion modal  -->
 
                  <!-- Add Reservation Modal -->
-                <div class="modal fade" id="addReservationModal" tabindex="-1" role="dialog" aria-labelledby="addReservationModalLabel" aria-hidden="true">
+                 <div class="modal fade" id="addReservationModal" tabindex="-1" role="dialog" aria-labelledby="addReservationModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title" id="addReservationModalLabel">Add Reservation</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                        <div class="card">
-                            <div class="card-body">
-                                <form class="row g-3" [formGroup]="addReservationForm">
-                                    <div class="col-md-6">
-                                        <label for="firstName" class="form-label">Type of Reservation</label>
-                                        <input formControlName="name" class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
-                                            <datalist id="datalistOptions">
-                                                <option *ngFor="let service of typeOfServices" [value]="service.name"> - {{service.price}} KES</option>
-                                                <option>Others</option>
-                                            </datalist>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addReservationModalLabel">Add Reservation</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form class="row g-3" [formGroup]="addReservationForm" (ngSubmit)="onSubmit()">
+                                            <div class="col-md-6">
+                                                <label for="firstName" class="form-label">Type of Reservation</label>
+                                                <input formControlName="name" class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+                                                <datalist id="datalistOptions">
+                                                    <option *ngFor="let service of typeOfServices" [value]="service.name"> - {{service.price}} KES</option>
+                                                    <option>Others</option>
+                                                </datalist>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="price" class="form-label">Price (KES)</label>
+                                                <input formControlName="price" type="text" class="form-control" id="price" readonly>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="store" class="form-label">Store</label>
+                                                <input formControlName="store" class="form-control" list="storeList" id="store" placeholder="Type to search...">
+                                                <datalist id="storeList">
+                                                    <option>Others</option>
+                                                    <option *ngFor="let store of stores" [value]="store.name"> - {{store.badge}}</option>
+                                                </datalist>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="expert" class="form-label">Expert</label>
+                                                <input formControlName="expert" class="form-control" list="expertList" id="expert" placeholder="Type to search...">
+                                                <datalist id="expertList">
+                                                    <option *ngFor="let expert of experts" [value]="expert.name"> - {{expert.ratings}} stars ratings</option>
+                                                </datalist>
+                                            </div>
+                                            <div class="col-md-6" style="display: none;">
+                                                <label for="reservationExpert" class="form-label">Reservation Expert</label>
+                                                <input formControlName="reservationExpert" type="text" class="form-control" id="reservationExpert" readonly>
+                                            </div>
+                                            <div class="col-md-6" style="display: none;">
+                                                <label for="typeOfService" class="form-label">Type of Service</label>
+                                                <input formControlName="typeOfService" type="text" class="form-control" id="name" readonly>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="reservationDate" class="form-label">Reservation Date</label>
+                                                <input formControlName="reservationDate" type="date" class="form-control" id="reservationDate">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="startTime" class="form-label">Available Time</label>
+                                                <select formControlName="startTime" id="startTime" class="form-select">
+                                                    <option selected>Choose...</option>
+                                                    <option *ngFor="let time of availableTimes" [value]="time">{{ time }} - {{getNextHour(time)}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="gridCheck">
+                                                    <label class="form-check-label" for="gridCheck">
+                                                        Check me out
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="text-center col-12">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="reset" class="btn btn-secondary">Reset</button>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="price" class="form-label">Price (KES)</label>
-                                        <input formControlName="price" type="text" class="form-control disabled" id="price" readonly>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="store" class="form-label">Store</label>
-                                        <input formControlName="store" class="form-control" list="storeList" id="store" placeholder="Type to search...">
-                                            <datalist id="storeList">
-                                                <option>Others</option>
-                                                <option *ngFor="let store of stores" [value]="store.name"> - {{store.badge}}</option>
-                                            </datalist>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="expert" class="form-label">Expert</label>
-                                        <input formControlName="expert" class="form-control" list="expertList" id="expert" placeholder="Type to search...">
-                                            <datalist id="expertList">
-                                                <option *ngFor="let expert of experts" [value]="expert.name"> - {{expert.ratings}} stars ratings</option>
-                                            </datalist>
-                                    </div>
-                                    <div class="col-md-6" style="display: none;">
-                                        <label for="reservationExpert" class="form-label">Reservation Expert</label>
-                                        <input formControlName="reservationExpert" type="text" class="form-control disabled" id="reservationExpert" readonly>
-                                    </div>
-                                    <div class="col-md-6" style="display: none;">
-                                        <label for="typeOfService" class="form-label">Type of Service</label>
-                                        <input formControlName="typeOfService" type="text" class="form-control disabled" id="name" readonly>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="reservationDate" class="form-label">Reservation Date</label>
-                                        <input formControlName="reservationDate" type="date" class="form-control" id="reservationDate">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="startTime" class="form-label">Start Time</label>
-                                        <select formControlName="startTime" id="startTime" class="form-select">
-                                            <option selected>Choose...</option>
-                                            <option *ngFor="let time of availableTimes" [value]="time">{{ time }}</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="endTime" class="form-label">End Time</label>
-                                        <select formControlName="endTime" id="endTime" class="form-select">
-                                            <option selected>Choose...</option>
-                                            <option *ngFor="let time of availableTimes" [value]="time">{{ time }}</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="col-12">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="gridCheck">
-                                            <label class="form-check-label" for="gridCheck">
-                                            Check me out
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="text-center col-12">
-                                        <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
-                                        <button type="reset" class="btn btn-secondary">Reset</button>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
-                        </div>
-                    </div>
                     </div>
                 </div>
-                <!-- end of add reservation -->
+                
+                 <!-- end of add reservation -->
   
 
             </div>

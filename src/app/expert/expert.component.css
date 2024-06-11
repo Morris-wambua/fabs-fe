@@ -1,0 +1,84 @@
+.main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 80px 1fr;
+  grid-template-areas:
+    "head-row"
+    "body-row";
+}
+
+.nav {
+  grid-area: head-row;
+}
+
+.content {
+  grid-area: body-row;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  grid-template-rows: repeat(3, 1fr); /* 3 rows */
+  gap: 10px;
+  padding: 10px;
+  grid-template-areas:
+    "c1 c2 c3 c4"
+    "r1 r1 r3 r4"
+    "r1 r1 l3 r4";
+}
+
+.card {
+  padding: 20px;
+  color: white;
+  border-radius: 8px;
+  text-align: center;
+  height: 250px;
+  transition: transform 0.3s, background-color 0.3s;
+  background-color: #333; /* Ensure all cards have the same initial background color */
+}
+
+.card:hover {
+  transform: scale(1.01);
+  background-color: #444;
+  padding: 0 !important;
+}
+
+.card:nth-child(2) {
+  grid-area: c2;
+}
+.card:nth-child(3) {
+  grid-area: c3;
+}
+.card:nth-child(4) {
+  grid-area: c4;
+}
+.card:nth-child(5) {
+  grid-area: r1;
+  height: 500px !important;
+}
+.card:nth-child(6) {
+  grid-area: r3;
+}
+.card:nth-child(7) {
+  grid-area: l3;
+}
+.card:nth-child(8) {
+  grid-area: r4;
+  height: 500px !important;
+}
+
+@media (max-width: 700px) {
+  .content {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(8, 300px);
+    grid-template-areas: initial;
+  }
+
+  .card {
+    grid-area: initial !important;
+  }
+
+  .card:nth-child(5),
+  .card:nth-child(8) {
+    height: 250px !important;
+  }
+}

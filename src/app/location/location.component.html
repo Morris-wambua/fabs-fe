@@ -1,3 +1,23 @@
-<div *ngFor="let location of locations">
-  <div>{{ location.name }}</div>
+<div class="nav-container">
+  <div class="nav-logo-section">
+    <div class="nav-logo">
+      <img src="./assets/img/barber2.jpg" alt="" srcset="">
+    </div>
+    <div class="logo-name">Fabs</div>
+  </div>
+  <div class="nav-content-section">
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Contants</a></li>
+      <li><a href="#">Gallery</a></li>
+      <li><a href="#">Shops</a></li>
+    </ul>
+  </div>
+  <div class="nav-left-section">
+    <form action="submit" class="form">
+      <input type="search" class="form-input" placeholder="Search...">
+      <input type="button" class="form-input btn btn-dark" value="Logout">
+    </form>
+  </div>
 </div>

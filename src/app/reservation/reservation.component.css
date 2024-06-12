@@ -35,6 +35,39 @@
   border-radius: 100%;
 }
 
+.span-secondary {
+  color: gray;
+}
+
+.span-primary {
+  color: blue;
+}
+
+.span-success {
+  color: #767dca;
+}
+
+.span-danger {
+  color: red;
+}
+
+.span-info {
+  color: skyblue;
+}
+
+.tos-card {
+  width: 400px;
+  background: linear-gradient(135deg, #fff 60%, #a398c6 40%);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.carousel-inner {
+  display: flex;
+  justify-content: flex-start;
+}
+
 #wrapper {
   overflow-x: hidden;
   background-color: #f6f9ff;
@@ -60,6 +93,7 @@
 
 #page-content-wrapper {
   min-width: 100vw;
+  font-size: 0.9rem;
 }
 
 #wrapper.toggled #sidebar-wrapper {

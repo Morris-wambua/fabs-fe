@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TypeOfService } from '../general/TypeOfService';
 import { TypeofserviceService } from '../general/typeofservice.service';
-import { tap } from 'rxjs';
+import { of, switchMap, tap } from 'rxjs';
 import { StoreService } from '../store/store.service';
 import { Store } from '../store/store';
 import { ExpertService } from '../expert/expert.service';
@@ -22,13 +22,16 @@ export class ReservationComponent implements OnInit {
   public isSidebarVisible: boolean = true;
   public user!: string;
   public username!: string;
-  public reservationToDelete: Reservation | null = null;
+  public reservationToDelete!: Reservation;
+  public reservationToCancel!: Reservation | null;
   public addReservationForm!: FormGroup; // declare an empty form
   public typeOfServices: TypeOfService[] = [];
+  public groupedTypeOfServices: any = [];
   public stores: Store[] = [];
   public experts: Expert[] = [];
   public availableTimes: string[] = [];
   public reservationRequest!: Reservation;
+  public canceledStatus = ReservationStatus.CANCELLED;
 
   constructor(
     private reservationService: ReservationService,
@@ -43,9 +46,9 @@ export class ReservationComponent implements OnInit {
     this.fetchReservations();
     this.fetchLoginUser();
     this.initializeForm();
-    this.fetchTypeOfServices();
     this.onReservationTypeChange();
     this.fetchStores();
+    this.fetchTypeOfServices();
   }
 
   // This will initialize the add reservation form
@@ -86,9 +89,9 @@ export class ReservationComponent implements OnInit {
     if (mode === 'edit') {
       button.setAttribute('data-bs-target', '#updateUserModal');
     }
-    if (mode === 'delete') {
-      this.reservationToDelete = reservation;
-      button.setAttribute('data-bs-target', '#deleteReservationModal');
+    if (mode === 'cancel') {
+      this.reservationToCancel = reservation;
+      button.setAttribute('data-bs-target', '#cancelReservationModal');
     }
 
     container?.appendChild(button);
@@ -124,6 +127,28 @@ export class ReservationComponent implements OnInit {
       );
     } else {
       console.error('Reservation ID is undefined');
+    }
+  }
+
+  // Update reservation
+  public updateReservationStatus(
+    id: string,
+    reservation: Reservation,
+    status: ReservationStatus
+  ) {
+    if (reservation) {
+      reservation.status = status;
+      console.log('reservation to update: ', reservation);
+      this.reservationService.updateReservation(id, reservation).subscribe(
+        (response: any) => {
+          console.log(response);
+          this.fetchReservations();
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error);
+          alert(error.message);
+        }
+      );
     }
   }
 
@@ -166,6 +191,7 @@ export class ReservationComponent implements OnInit {
       .pipe(
         tap((services: TypeOfService[]) => {
           this.typeOfServices = services;
+          this.groupTypeOfServices();
         })
       )
       .subscribe({
@@ -173,6 +199,18 @@ export class ReservationComponent implements OnInit {
           console.error('Error fetching type of services:', error);
         },
       });
+  }
+
+  // group typeOfServices in chunks of 3
+  public groupTypeOfServices() {
+    console.log('Pushed TOS: called');
+    console.log('tos:', this.typeOfServices);
+    for (let i = 0; i < this.typeOfServices.length; i += 3) {
+      const group = this.typeOfServices.slice(i, i + 3);
+      if (group.length > 0) {
+        this.groupedTypeOfServices.push(group);
+      }
+    }
   }
 
   // This will dynamically update the price based on the user's choice of type of service
@@ -283,6 +321,7 @@ export class ReservationComponent implements OnInit {
       this.expertService.getAvailableTimeSlots(expertId, date).subscribe(
         (times: string[]) => {
           this.availableTimes = times;
+          console.log('Available slots: ', times);
         },
         (error: HttpErrorResponse) => {
           alert(error.message);
@@ -335,7 +374,7 @@ export class ReservationComponent implements OnInit {
         endTime: endTime,
         store: storeId,
         reservationExpert: expertId,
-        status: ReservationStatus.IN_PROGRESS,
+        status: ReservationStatus.BOOKED_PENDING_ACCEPTANCE,
         typeOfService: serviceId,
         price: price,
       };

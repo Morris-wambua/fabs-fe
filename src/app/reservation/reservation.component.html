@@ -61,53 +61,37 @@
             </nav>
 
             <div class="container-fluid px-4">
-                <div class="row g-3 my-2">
-                    <div class="col-md-3">
-                        <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                
+                <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item" *ngFor="let group of groupedTypeOfServices; let i = index" [ngClass]="{'active': i === 0}">
+                        <div class="d-flex justify-content-around">
+                          <div class="p-3 tos-card shadow-sm rounded" *ngFor="let tos of group">
                             <div>
-                                <h3 class="fs-2">720</h3>
-                                <p class="fs-5">Products</p>
+                              <h3 class="fs-2">{{tos.price}}</h3>
+                              <p class="fs-5">{{tos.name}}</p>
+                              <p>{{tos.ratings}} stars</p>
+                              <p class="fs-5">{{tos.category}}</p>
                             </div>
-                            <i class="fas fa-gift fs-1 primary-text border rounded-full secondary-bg p-3"></i>
+                          </div>
                         </div>
+                      </div>
                     </div>
-
-                    <div class="col-md-3">
-                        <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-                            <div>
-                                <h3 class="fs-2">4920</h3>
-                                <p class="fs-5">Sales</p>
-                            </div>
-                            <i
-                                class="fas fa-hand-holding-usd fs-1 primary-text border rounded-full secondary-bg p-3"></i>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-                            <div>
-                                <h3 class="fs-2">3899</h3>
-                                <p class="fs-5">Delivery</p>
-                            </div>
-                            <i class="fas fa-truck fs-1 primary-text border rounded-full secondary-bg p-3"></i>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-                            <div>
-                                <h3 class="fs-2">%1</h3>
-                                <p class="fs-5">Discount</p>
-                            </div>
-                            <i class="fas fa-chart-line fs-1 primary-text border rounded-full secondary-bg p-3"></i>
-                        </div>
-                    </div>
-                </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                  </div>
+                  
 
                 <div class="row my-5">
                     <h3 class="fs-4 mb-3">Recent Reservations</h3>
                     <div class="col">
-                        <table class="table bg-white rounded shadow-sm  table-hover">
+                        <table class="table table-responsive bg-white rounded shadow-sm table-hover">
                             <thead>
                                 <tr>
                                     <th scope="col" width="50">#</th>
@@ -119,6 +103,8 @@
                                     <th scope="col">Expert Name</th>
                                     <th scope="col">Type of Service</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col">Update</th>
+                                    <th scope="col">Cancel</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -129,17 +115,37 @@
                                     <td>{{reservation?.reservationDate}}</td>
                                     <td>{{reservation?.startTime}}</td>
                                     <td>{{reservation?.endTime}}</td>
-                                    <td>{{reservation?.reservationExpert}}</td>
+                                    <td>{{reservation?.expert}}</td>
                                     <td>{{reservation?.typeOfService}}</td>
-                                    <td>{{reservation?.status}}</td>
+                                    <td>
+                                        <span [ngClass]="{
+                                            'span-secondary': reservation.status === 'BOOKED_PENDING_ACCEPTANCE',
+                                            'span-primary': reservation.status === 'BOOKED_ACCEPTED',
+                                            'span-success': reservation.status === 'IN_PROGRESS',
+                                            'span-danger': reservation.status === 'CANCELLED',
+                                            'span-info': reservation.status === 'SERVED'
+                                          }"
+                                        class="status-span d-inline-block">
+                                        {{ reservation?.status }}
+                                        </span>
+                                    </td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-sm px-3">
                                             <i class="fas fa-edit me-2"></i>
                                         </button>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-sm px-3" (click)="onOpenModal(reservation, 'delete')">
-                                            <i class="fas fa-trash me-2"></i>
+                                        <button *ngIf="reservation?.status === canceledStatus"
+                                                type="button"
+                                                class="btn btn-danger btn-sm px-3" 
+                                                disabled>
+                                                <i class="fas fa-window-close me-2"></i>
+                                        </button>
+                                        <button *ngIf="reservation.status !== canceledStatus" 
+                                                type="button"
+                                                class="btn btn-danger btn-sm px-3" 
+                                                (click)="onOpenModal(reservation, 'cancel')">
+                                                <i class="fas fa-window-close me-2"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -149,18 +155,18 @@
                 </div>
 
                 <!-- Delete modal  -->
-                <div class="modal fade" id="deleteReservationModal" tabindex="-1" aria-labelledby="deleteModelLabel" aria-hidden="true">
+                <div class="modal fade" id="cancelReservationModal" tabindex="-1" aria-labelledby="cancelModelLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModelLabel">Delete Reservation</h5>
+                                <h5 class="modal-title" id="deleteModelLabel">Cancel Reservation</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <p>Are you sure you want to delete <span class = "fw-bold">{{reservationToDelete?.name || 'this reservation'}}</span> scheduled on <span class="fw-bold">{{reservationToDelete?.reservationDate}}</span>?</p>
+                                <p>Are you sure you want to cancel <span class = "fw-bold">{{reservationToCancel?.name || 'this reservation'}}</span> scheduled on <span class="fw-bold">{{reservationToCancel?.reservationDate}}</span>?</p>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                    <button (click)="deleteReservation(reservationToDelete?.id)" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+                                    <button *ngIf="reservationToCancel" (click)="updateReservationStatus(reservationToCancel.id, reservationToCancel, canceledStatus)" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
                                 </div>
                             </div>
                         </div>
